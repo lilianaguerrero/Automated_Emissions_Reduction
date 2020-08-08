@@ -1,3 +1,7 @@
+Requirements to run refrigerator_sim.py:
+  - matplotlib
+  - simpy
+
 In the accompanying MOERS.csv file:
 
   - The timestamp specifies the START of the time window over which a MOER
