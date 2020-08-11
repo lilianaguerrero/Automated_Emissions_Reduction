@@ -26,12 +26,49 @@ def main():
     env.process(month_simulation(env))
     env.run(until=744) #744 hours in month of March
     runtime = statuses.count('on')*5 #in minutes
+    print(lbs_CO2)
     print('The total amount of CO2 for March 2019 is ' + str(incremental_CO2) + ' lbs of CO2')
     print('The total refrigerator runtime for March 2019 is ' + str(runtime) + ' minutes or ' + str(runtime/60) + ' hours')
-    plt.plot(monthly_timestamps, rfg_temps)
-    plt.plot(monthly_timestamps, monthly_MOERS)
-    plt.plot(monthly_timestamps, statuses)
-    plt.plot(monthly_timestamps, lbs_CO2)
+    plot(monthly_timestamps, monthly_MOERS, rfg_temps, lbs_CO2)
+    
+def plot(monthly_timestamps, monthly_MOERS, rfg_temps, lbs_CO2):
+    fig,ax1 = plt.subplots()
+
+    color = 'red'
+    ax1.set_xlabel('March 2019')
+    ax1.set_ylabel('MOER (lbs*CO2/MW*hr)', color=color)
+    ax1.plot(monthly_timestamps, monthly_MOERS, label='Real Time MOER', color=color)
+    ax1.tick_params(axis='y', labelcolor=color)
+    
+    ax2 = ax1.twinx()  
+
+    color = 'tab:blue'
+    ax2.set_ylabel('Internal Refrigerator Temperature (F)', color=color)  # we already handled the x-label with ax1
+    ax2.plot(monthly_timestamps, rfg_temps, label='Internal Refrigerator Temperature', color=color)
+    ax2.tick_params(axis='y', labelcolor=color)
+    ax2.yaxis.set_label_coords(1.025,0.25)
+    
+    ax3 = ax1.twinx()
+    color = 'tab:green'
+    ax3.plot(monthly_timestamps, statuses, 'g.', label='Smart Plug On/ Off')
+    ax3.tick_params(axis='y', labelcolor=color)
+    ax3.yaxis.tick_left()
+    
+
+    ax4 = ax1.twinx()
+    color = 'black'
+    ax4.set_ylabel('CO2 (lbs)', color=color)
+    ax4.plot(monthly_timestamps, lbs_CO2, 'k-', label='Cumulative CO2')
+    ax4.tick_params(axis='y', labelcolor=color)
+    ax4.yaxis.set_label_coords(1.025,.95)
+
+    fig.set_tight_layout(monthly_timestamps)
+    
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='lower right')
+    ax3.legend(loc='lower left')
+    ax4.legend(loc='upper right')
+    plt.title('Automated Emissions Reduction Simulation')
     plt.show()
 
 temp = 33 #starting rfg temp
@@ -64,13 +101,12 @@ def month_simulation(env):
                     statuses.append('on')
                     temp -= (10/12)
                     incremental_CO2 += (MOER * .0002 * 1/12) #in lbs*C02 since MW*(10^-6)= W & 5min = hr/12
-                    rfg_temps.append(temp)
                     on_MOERS.append(MOER)
                     lowest_MOERS.remove(MOER)
                 else:
                     statuses.append('off')
                     temp += (5/12)
-                    rfg_temps.append(temp)
+                rfg_temps.append(temp)
                 lbs_CO2.append(incremental_CO2)
         n += 12 #twelve five minute intervals per hour
         hourly_duration = 1 #run this code for every hour during the month
