@@ -25,26 +25,17 @@ def main():
     env = simpy.Environment()
     env.process(month_simulation(env))
     env.run(until=744) #744 hours in month of March
-    runtime = statuses.count('on')*5 #in minutes
-    total_CO2 = 0
-    for status in statuses:
-        if status == 'on':
-            total_CO2 += 200
-
-
-
-    print('The refrigerator runtime for March is ' + str(runtime) + ' minutes or ' + str(runtime/60) + ' hours')
     # print(rfg_temps,monthly_MOERS,statuses)
-    # plt.plot(monthly_timestamps, rfg_temps)
-    # plt.plot(monthly_timestamps, statuses)
-    # plt.show()
+    plt.plot(monthly_timestamps, rfg_temps)
+    plt.plot(monthly_timestamps, statuses)
+    plt.show()
     print("Simulation complete")
 
 temp = 33 #starting rfg temp
 statuses = []
 rfg_temps = []
 def month_simulation(env):
-    #runs hourly simulations over the period of a month
+    #does hourly simulations over the period of a month
     n = 0 #five minute interval as given in the CSV data
     global temp
     global statuses
@@ -72,20 +63,8 @@ def month_simulation(env):
         n += 12 #twelve five minute intervals per hour
         hourly_duration = 1 #run this code for every hour during the month
         yield env.timeout(hourly_duration)
-
-# def plot():
-#     plt.plot(monthly_timestamps, monthly_MOERS)
-#     plt.plot(monthly_timestamps, statuses)
-#     plt.xlabel('March 2019 Timestamps')
-#     plt.ylabel('Real Time MOER')
-#     plt.title('Automated Emissions Reduction System')
-#     plt.show()
+        
 
 if __name__ == '__main__':
     process_csv()
     main()
-    # plot()
-
-
-
-
