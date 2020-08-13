@@ -115,7 +115,6 @@ def matplot(monthly_timestamps, monthly_MOERS, rfg_temps, lbs_CO2):
     ax2 = ax1.twinx()  #shares x axis with ax1
     color = '#0047ab'
     ax2.set_ylabel('Internal Refrigerator Temperature (F)', color=color) 
-    #oscillates between 32.999 & 42.999 degrees
     ax2.plot(monthly_timestamps, rfg_temps, 
             label='Real Time Internal Refrigerator Temperature', 
             color=color)
