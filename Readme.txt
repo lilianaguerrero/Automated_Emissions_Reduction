@@ -1,6 +1,7 @@
 Requirements to run refrigerator_sim.py:
   - matplotlib
   - simpy
+  - numpy 
 
 In the accompanying MOERS.csv file:
 

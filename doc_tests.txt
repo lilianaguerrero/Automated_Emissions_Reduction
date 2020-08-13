@@ -1,0 +1,22 @@
+DocTests for functions in refrigerator_sim.py
+
+Run tests in shell using command: python3 -m doctest -v doc_tests.txt
+*******************************************************************
+
+    >>> from refrigerator_sim import process_csv
+
+    >>> process_csv()
+    Processed CSV
+
+    >>> from refrigerator_sim import main
+
+    >>> main()
+    The total amount of CO2 for March 2019 is 20.6 lbs of CO2
+    The total refrigerator runtime for March 2019 is 14860 minutes or 247.7 hours
+    Simulation Complete
+
+
+
+
+
+
